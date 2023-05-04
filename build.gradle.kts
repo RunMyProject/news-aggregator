@@ -16,6 +16,12 @@ repositories {
 }
 
 dependencies {
+	// define any required OkHttp artifacts without version
+	implementation("com.squareup.okhttp3:okhttp:4.2.1")
+
+	// https://mvnrepository.com/artifact/org.json/json
+	implementation("org.json:json:20230227")
+
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
