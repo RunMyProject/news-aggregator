@@ -1,9 +1,16 @@
+// This package contains classes related to news aggregation and analysis
 package com.render.newsaggregator
+import java.time.Instant
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class News(
-        val title: String,
-        val url: String,
-        val source: String
+        val titleHackerNews: String?,
+        val urlHackerNews: String?,
+        val byHackerNews: String?,
+        val dateHackerNews: Instant?,
+        val titleNewYorkTimes: String?,
+        val urlNewYorkTimes: String?,
+        val byNewYorkTimes: String?,
+        val dateNewYorkTimes: Instant?,
+        val matchedInfo: Int,
+        val latestDate: Instant?
 )

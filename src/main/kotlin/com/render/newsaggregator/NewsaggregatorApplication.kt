@@ -1,3 +1,4 @@
+// This package contains classes related to news aggregation and analysis
 package com.render.newsaggregator
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
