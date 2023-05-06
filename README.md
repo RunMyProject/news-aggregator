@@ -2,6 +2,8 @@
 
 NewsAggregator is a web application that aggregates news from multiple sources, including Hacker News and the New York Times Top Stories API. It provides two RESTful API endpoints: one for all aggregated news chronologically and one for news from a specific source. The application is distributed via Render PaaS.
 
+# TO DO....
+
 Usage Instructions
 Example API key: 96f8d418ea904f1e88eb1b1c5fe7439f
 
@@ -44,4 +46,5 @@ matchedInfo: an integer indicating how many pieces of information matched betwee
 latestDate: the latest date between the Hacker News and New York Times articles
 The getHackerNewsTopStories function retrieves the top stories from the Hacker News API and returns them as a list of TempNews objects. The getNewYorkTimesTopStories function retrieves the top stories from the New York Times API and returns them as a list of TempNews objects.
 
+# TO DO.......
 Overall, this package provides a simple way to retrieve and merge news from
