@@ -1,5 +1,5 @@
-// This package contains classes related to news aggregation and analysis
-package com.render.newsaggregator
+// This package contains the model classes related to news aggregation and analysis
+package com.render.newsaggregator.model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties

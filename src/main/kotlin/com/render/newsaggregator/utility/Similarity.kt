@@ -1,5 +1,5 @@
-// This package contains classes related to news aggregation and analysis
-package com.render.newsaggregator
+// This package contains utility classes for news aggregation and analysis
+package com.render.newsaggregator.utility
 
 // Jaro object contains functions for computing string similarity using Jaro algorithm
 object Jaro {
