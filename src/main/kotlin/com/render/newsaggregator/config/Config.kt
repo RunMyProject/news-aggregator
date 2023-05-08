@@ -1,3 +1,6 @@
+// news-aggregator
+// @May - 2023 - Edoardo Sabatini
+
 package com.render.newsaggregator.config
 
 object Config {

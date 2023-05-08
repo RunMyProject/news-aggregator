@@ -1,3 +1,6 @@
+// news-aggregator
+// @May - 2023 - Edoardo Sabatini
+
 // This package contains classes related to storage data
 package com.render.newsaggregator.persistence
 
@@ -52,7 +55,7 @@ object Persistence {
      * @param data the data to save
      * @param fileName the name of the file to save to
      */
-    fun <T> saveData(data: List<T>, fileName: String) {
+    fun <T> saveData(data: List<T>?, fileName: String) {
         try {
             // Create file output stream and object output stream for the specified file
             FileOutputStream(fileName).use { fileOutputStream ->

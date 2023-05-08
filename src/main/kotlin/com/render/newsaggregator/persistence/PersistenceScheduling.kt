@@ -1,3 +1,6 @@
+// news-aggregator
+// @May - 2023 - Edoardo Sabatini
+
 package com.render.newsaggregator.persistence
 
 // exceptions
@@ -43,15 +46,23 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
     companion object {
         var isFileLocked: Boolean = false
         var apiKey: String = ""
+        var isInitialized: Boolean = false
     }
 
     init {
         apiKey = setApiKey
     }
 
+    fun myLog(msg: String) {
+        if(!isInitialized) print(msg)
+    }
+    fun myLogln(msg: String) {
+        if(!isInitialized) println(msg)
+    }
+
     // Function to retrieve top stories from Hacker News API
     fun getHackerNewsTopStories(): List<TempNews> {
-        println("Reading top stories from the Hacker News API...")
+        myLogln("Reading top stories from the Hacker News API...")
         val hnTopStoriesRequest = ParseExtractorData.createRequest(Config.HN_BASE_URL + Config.HN_TOP_STORIES_ENDPOINT)
         val hnTopStoriesResponse = ParseExtractorData.executeRequest(hnTopStoriesRequest)
 
@@ -70,10 +81,10 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
             val id = topStoriesIds[i].toString()
             val hnItemUrl = Config.HN_BASE_URL + Config.HN_ITEM_ENDPOINT + id + ".json"
             // println("Reading item with ID $id from the Hacker News API...")
-            print(".")
+            myLog(".")
             if(count>50) {
                 count=0;
-                println(".")
+                myLogln(".")
             } else count++
 
             val hnItemRequest = ParseExtractorData.createRequest(hnItemUrl)
@@ -97,14 +108,13 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
                 )
             }
         }
-        println(".")
-
+        myLogln(".")
         return hnItems
     }
 
     // Function to retrieve top stories from New York Times API
     fun getNewYorkTimesTopStories(): List<TempNews> {
-        println("Reading top stories from the New York Times API...")
+        myLogln("Reading top stories from the New York Times API...")
         val nytRequest = ParseExtractorData.createRequest(Config.NYT_BASE_URL + Config.NYT_TECH_ENDPOINT + Config.NYT_API_KEY_PARAM + apiKey)
         val nytResponse = ParseExtractorData.executeRequest(nytRequest)
 
@@ -136,10 +146,9 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
      * at fixed intervals.
      */
     override fun run() {
-        // Start the persistence scheduling loop
-        while (true) {
+        while (true) {  // Start the persistence scheduling loop
             saveDataToFile()
-            // Wait for the next persistence interval to elapse
+            myLogln("Wait for the next persistence interval to elapse")
             Thread.sleep(PersistenceConstants.PERSISTENCE_INTERVAL)
         }
     }
@@ -148,6 +157,8 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
      * Saves the data to a file using Java serialization.
      */
     private fun saveDataToFile() {
+
+        myLogln("\nSystem data initialization, please wait...")
 
         isFileLocked = true
 
@@ -161,8 +172,9 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
         Persistence.saveData(hackerNewsTopStoriesTempNews, Config.HACKER_NEWS_FILE_NAME)
         Persistence.saveData(newYorkTimesTopStoriesTempNews, Config.NEW_YORK_TIMES_FILE_NAME)
 
-        println("done.")
+        myLogln("done.")
 
         isFileLocked = false
+        isInitialized = true
     }
 }

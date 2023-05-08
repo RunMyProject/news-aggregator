@@ -1,3 +1,6 @@
+// news-aggregator
+// @May - 2023 - Edoardo Sabatini
+
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {

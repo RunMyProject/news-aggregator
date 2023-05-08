@@ -1,3 +1,6 @@
+// news-aggregator
+// @May - 2023 - Edoardo Sabatini
+
 // This package contains classes related to news aggregation and analysis
 package com.render.newsaggregator
 

@@ -1,7 +1,10 @@
-package com.render.newsaggregator
+// news-aggregator
+// @May - 2023 - Edoardo Sabatini
 
 // This package contains classes related to data persistence,
 // loading from external APIs, and storage of news articles to files.
+package com.render.newsaggregator
+
 import com.render.newsaggregator.persistence.PersistenceScheduling
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -30,25 +33,34 @@ fun checkApiKey(apiKey: String): Boolean {
 
 fun main(args: Array<String>) {
     val apiProperties = Properties()
-    val apiFile = File("src/main/resources/ApiKey.properties")
-    if (apiFile.exists()) {
-        apiProperties.load(apiFile.inputStream())
+    val apiResource = NewsaggregatorApplication::class.java.getResource("/ApiKey.properties")
+    if (apiResource != null) {
+        apiProperties.load(apiResource.openStream())
         val apiKey = apiProperties.getProperty("nytimes.api.key")
         if (apiKey.isNullOrEmpty()) {
             println("ERROR: Missing API key. Please register for an API key on the New York Times website and update the 'ApiKey.properties' file.")
         } else {
             if (checkApiKey(apiKey)) {
-                println("API key validated")
-                // OK: apiKey valid and stored!
+                println("""
+        _________________________
+       /                         \
+      |  -----------------------  |
+      | |                       | |
+      | |        SYSTEM         | |
+      | |        REBOOT         | |
+      | |                       | |
+      |  -----------------------  |
+       \_________________________/
+""")
+                // OK: apiKey validated and stored!
                 val persistenceScheduling = PersistenceScheduling(apiKey)
-                println("System data initialization, please wait...")
                 Thread(persistenceScheduling).start()
             } else {
                 println("ERROR: Invalid API key: $apiKey . Please check your API key and update the 'ApiKey.properties' file.")
             }
         }
     } else {
-        println("ERROR: Missing API key file. Please create an 'ApiKey.properties' file in the 'resources' directory and include your API key.")
+        println("ERROR: Missing API key file. Please create an 'ApiKey.properties' file in the 'src/main/resources' directory and include your API key.")
     }
     runApplication<NewsaggregatorApplication>(*args)
 }
