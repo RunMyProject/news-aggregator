@@ -1,50 +1,50 @@
-# news-aggregator
+# News Aggregator Application
+---
+The News Aggregator is a web application that aggregates news from multiple sources, including Hacker News and the New York Times Top Stories API. It provides two RESTful API endpoints: one for all aggregated news chronologically and one for news from a specific source. The application is distributed via Render PaaS.
+***
+## APIs call from Render
 
-NewsAggregator is a web application that aggregates news from multiple sources, including Hacker News and the New York Times Top Stories API. It provides two RESTful API endpoints: one for all aggregated news chronologically and one for news from a specific source. The application is distributed via Render PaaS.
+- https://news-aggregator-h7g4.onrender.com/news
+- https://news-aggregator-h7g4.onrender.com/news/hackernews
+- https://news-aggregator-h7g4.onrender.com/news/newyorktimes
 
-# TO DO....
+## Getting Started
 
-Usage Instructions
-Example API key: 96f8d418ea904f1e88eb1b1c5fe7439f
+To run the News Aggregator application on your local machine, you need to have Gradle installed. Once you have installed these dependencies, follow the instructions below:
 
-Service: /news
-Endpoint for merged news from Hacker News and the New York Times Top Stories API: https://news-aggregator-zpl4.onrender.com/news/api/{API-KEY}
+1. Clone the repository: `git clone https://github.com/example/news-aggregator.git`
+2. Navigate to the project directory: `cd news-aggregator`
+3. Build the application: `./gradlew build`
+4. Start the application: `./gradlew bootRun`
+5. Access the application at `http://localhost:8080`
 
-Endpoint for news from Hacker News: https://news-aggregator-zpl4.onrender.com/news/hackernews
+## Description of News Aggregator Application Architecture
 
-Endpoint for news from the New York Times Top Stories API: https://news-aggregator-zpl4.onrender.com/news/newyorktimes?api={API-KEY}
+The News Aggregator application is designed as a microservice architecture that uses a RESTful API to provide access to its functionality. The application is built using the Kotlin programming language and the Spring Boot framework. The source code of the application is organized into several packages, each of which contains a set of related classes.
 
-Endpoint Details
-/news/api/{API-KEY}: Returns a merged list of news from Hacker News and the New York Times Top Stories API. The {API-KEY} parameter is required and should be a valid API key.
+Here is an overview of the application's package structure:
 
-/news/hackernews: Returns a list of news from Hacker News.
+- `com.render.newsaggregator`: contains the `NewsAggregatorApplication.kt` class, which starts the Spring Boot framework and initializes the application's components.
+- `com.render.newsaggregator`: contains the `NewsController.kt` class, which defines the RESTful endpoints of the application.
+- `com.render.newsaggregator.config`: contains the `Config.kt` class, which defines the application's configuration.
+- `com.render.newsaggregator.exception`: contains the `InvalidAPIException.kt` and `InvalidSourceException.kt` classes, which handle the exceptions thrown by the application.
+- `com.render.newsaggregator.model`: contains the classes that define the application's data models, such as `Article.kt`, `News.kt`, `Item.kt`, `Result.kt`, and `TempNews.kt`.
+- `com.render.newsaggregator.utility`: contains the classes that provide auxiliary functionality, such as `ParseExtractorData.kt` and `Similarity.kt`.
+- `com.render.newsaggregator.persistence`: contains the classes that provide persistence functionality, such as `Persistence.kt` and `PersistenceScheduling.kt`.
 
-/news/newyorktimes?api={API-KEY}: Returns a list of news from the New York Times Top Stories API. The api query parameter is optional and should be a valid API key.
+The News Aggregator application also includes persistence functionality to store the API keys and scheduling functionality to update the news periodically.
 
-Running the Application
-To run the application locally, clone the repository and navigate to the project directory. Then, run the following command:
+The application provides several endpoints for accessing news data:
 
-bash
-Copy code
-./gradlew bootRun
-The application should now be running at http://localhost:8080.
+- `/news`: returns all aggregated news chronologically.
+- `/news/{source}`: returns news from a specific source (newyorktimes or hackernews).
+- `/hello`: returns a simple greeting message.
+- `/storeapikey/{apiKey}`: stores the provided API key in the System for future use.
 
-News Aggregation and Analysis Package
-This is a Kotlin package that contains classes related to news aggregation and analysis. The package contains a NewsController class that provides an endpoint for getting merged news from two different sources: the Hacker News API and the New York Times Top Stories API.
+The application uses logging to track its performance and to help debug issues. It also uses external APIs to fetch news data from different sources.
 
-The code imports several dependencies at the beginning, such as com.render.newsaggregator.Jaro for string comparison, com.fasterxml.jackson for JSON serialization/deserialization, and okhttp3 for making HTTP requests. The SOURCE_TOKEN_HACKER_NEWS and SOURCE_TOKEN_NEW_YORK_TIMES constants are defined to identify the sources of news to be aggregated.
+---
 
-The NewsController class defines several private variables to store the base URLs and endpoints for the Hacker News and New York Times APIs. It also defines an endpoint /news/api/{api} that takes an API key for the New York Times API as a path variable.
+## Conclusion
 
-The getNewsByAPI function in the NewsController class retrieves the top stories from both APIs and merges them together based on their titles and URLs. It creates a list of News objects, which have the following properties:
-
-title: the title of the news article
-url: the URL of the news article
-by: the author of the news article
-date: the date the news article was published
-matchedInfo: an integer indicating how many pieces of information matched between the Hacker News and New York Times articles
-latestDate: the latest date between the Hacker News and New York Times articles
-The getHackerNewsTopStories function retrieves the top stories from the Hacker News API and returns them as a list of TempNews objects. The getNewYorkTimesTopStories function retrieves the top stories from the New York Times API and returns them as a list of TempNews objects.
-
-# TO DO.......
-Overall, this package provides a simple way to retrieve and merge news from
+The News Aggregator application is a robust and scalable microservice that provides easy access to news data from various sources. It can be easily deployed and scaled on Render PaaS, making it an ideal solution for small and large-scale projects.
