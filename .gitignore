@@ -2,4 +2,5 @@
 # gitignore
 # @May - 2023 - Edoardo Sabatini
 # # # # # # # # # # # # # # # # #
-./ApiKey.properties
+ApiKey.properties
+
