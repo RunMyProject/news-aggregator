@@ -9,7 +9,7 @@ RUN apt-get install openjdk-17-jdk -y
 
 RUN mkdir /app
 COPY . /app
-COPY ApiKey.properties file-which-may-exist* /app/src/main/resources/ApiKey.properties
+COPY ApiKey.* /app/src/main/resources/ApiKey.properties
 WORKDIR /app
 
 RUN ./gradlew bootJar --no-daemon
