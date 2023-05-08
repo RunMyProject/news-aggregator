@@ -9,7 +9,9 @@ RUN apt-get install openjdk-17-jdk -y
 
 RUN mkdir /app
 COPY . /app
-COPY ApiKey.properties /app/src/main/resources/ApiKey.properties
+# RUN if [ -f ApiKey.properties ]; then cp ApiKey.properties src/main/resources/ApiKey.properties; fi
+#  COPY ApiKey.properties /app/src/main/resources/ApiKey.properties || true
+COPY ApiKey.properties file-which-may-exist* /app/src/main/resources/ApiKey.properties
 WORKDIR /app
 
 RUN ./gradlew bootJar --no-daemon

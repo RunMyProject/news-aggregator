@@ -40,7 +40,7 @@ fun loadApiKeyFromFile(): String {
     val properties = Properties()
     val resource = NewsaggregatorApplication::class.java.getResource("/ApiKey.properties")
     if (resource == null) {
-        println("ERROR: Missing API key file. Please create an 'ApiKey.properties' file in the 'src/main/resources' directory and include your API key.")
+        // println("ERROR: Missing API key file. Please create an 'ApiKey.properties' file in the 'src/main/resources' directory and include your API key.")
         return ""
     }
     properties.load(resource.openStream())
@@ -75,19 +75,10 @@ fun systemBoot(apiKey: String) {
 
 fun main(args: Array<String>) {
 
-    var isCloud = false // Set this to true if running on a PaaS like Render
+    var apiKey = loadApiKeyFromFile()
 
-    val properties = Properties()
-    val resource = NewsaggregatorApplication::class.java.getResource("/application.properties")
-    if (resource == null) {
-        println("ERROR: Missing iscloud property. Please create an 'application.properties' file in the 'src/main/resources' directory and include your iscloud condition.")
-        return
-    }
-    properties.load(resource.openStream())
-    isCloud = properties.getProperty("iscloud")?.toBoolean() ?: false
-
-    if (!isCloud) {
-        systemBoot(loadApiKeyFromFile())
+    if (apiKey.isNotEmpty()) {
+        systemBoot(apiKey)
     }
 
     runApplication<NewsaggregatorApplication>(*args)
