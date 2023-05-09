@@ -20,6 +20,8 @@ import java.io.File
 import java.util.*
 import java.net.URL
 
+import java.lang.System.getenv
+
 @SpringBootApplication
 class NewsaggregatorApplication
 
@@ -74,13 +76,15 @@ fun systemBoot(apiKey: String) {
 }
 
 fun main(args: Array<String>) {
-
-    var apiKey = loadApiKeyFromFile()
-
-    if (apiKey.isNotEmpty()) {
+    val apiKey = getenv("nytimes_api_key")
+    if (!apiKey.isNullOrBlank()) {
         systemBoot(apiKey)
+    } else {
+        val fileApiKey = loadApiKeyFromFile()
+        if (!fileApiKey.isNullOrBlank()) {
+            systemBoot(fileApiKey)
+        }
     }
-
     runApplication<NewsaggregatorApplication>(*args)
 }
 
