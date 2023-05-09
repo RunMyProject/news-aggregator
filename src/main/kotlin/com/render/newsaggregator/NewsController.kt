@@ -48,20 +48,6 @@ class NewsController {
             throw InvalidAPIException("API KEY is missing")
         }
 
-        /*
-        logger.info("Loading data Hacker News Top Stories...")
-        while (PersistenceScheduling.isFileLocked) {
-            Thread.sleep(1000) // Wait for 1 second
-        }
-        val hackerNewsTopStoriesTempNews = Persistence.loadData<TempNews>(Config.HACKER_NEWS_FILE_NAME)
-
-        logger.info("Loading data York Times Top Stories...")
-        while (PersistenceScheduling.isFileLocked) {
-            Thread.sleep(1000) // Wait for 1 second
-        }
-        val newYorkTimesTopStoriesTempNews = Persistence.loadData<TempNews>(Config.NEW_YORK_TIMES_FILE_NAME)
-        */
-
         while (PersistenceScheduling.isFileLocked) {
             Thread.sleep(1000) // Wait for 1 second
         }
@@ -84,7 +70,7 @@ class NewsController {
                 while (PersistenceScheduling.isFileLocked) {
                     Thread.sleep(1000) // Wait for 1 second
                 }
-                tempNewsList = Persistence.loadData<TempNews>(Config.HACKER_NEWS_FILE_NAME)
+                tempNewsList = PersistenceScheduling.hackerNewsTopStoriesTempNews
             }
             Config.SOURCE_TOKEN_NEW_YORK_TIMES -> {
                 if (PersistenceScheduling.apiKey.isNullOrEmpty()) {
@@ -94,7 +80,7 @@ class NewsController {
                 while (PersistenceScheduling.isFileLocked) {
                     Thread.sleep(1000) // Wait for 1 second
                 }
-                tempNewsList = Persistence.loadData<TempNews>(Config.NEW_YORK_TIMES_FILE_NAME)
+                tempNewsList = PersistenceScheduling.newYorkTimesTopStoriesTempNews
             }
             else -> throw InvalidSourceException("Invalid source: $source")
         }
