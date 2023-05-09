@@ -14,6 +14,7 @@ import com.render.newsaggregator.model.TempNews
 // libs
 import com.render.newsaggregator.persistence.Persistence
 import com.render.newsaggregator.utility.ParseExtractorData
+import org.slf4j.LoggerFactory
 
 // spring
 import org.springframework.web.bind.annotation.GetMapping
@@ -39,6 +40,9 @@ import com.render.newsaggregator.config.Config
  */
 
 class PersistenceScheduling(private val setApiKey: String) : Runnable {
+
+    private val logger = LoggerFactory.getLogger(PersistenceScheduling::class.java)
+
     object PersistenceConstants {
         const val PERSISTENCE_INTERVAL = 10L * 60L * 1000L // Persistence interval in milliseconds
     }
@@ -47,6 +51,9 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
         var isFileLocked: Boolean = false
         var apiKey: String = ""
         var isInitialized: Boolean = false
+        var mergedList = mutableListOf<News>()
+        var hackerNewsTopStoriesTempNews = mutableListOf<TempNews>()
+        var newYorkTimesTopStoriesTempNews = mutableListOf<TempNews>()
     }
 
     init {
@@ -61,19 +68,21 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
     }
 
     // Function to retrieve top stories from Hacker News API
-    fun getHackerNewsTopStories(): List<TempNews> {
+    fun makeHackerNewsTopStories() {
+
         myLogln("Reading top stories from the Hacker News API...")
+
+        hackerNewsTopStoriesTempNews.clear()
+
         val hnTopStoriesRequest = ParseExtractorData.createRequest(Config.HN_BASE_URL + Config.HN_TOP_STORIES_ENDPOINT)
         val hnTopStoriesResponse = ParseExtractorData.executeRequest(hnTopStoriesRequest)
 
         if (!hnTopStoriesResponse.isSuccessful) {
             println("Failed to read top stories from the Hacker News API.")
-            return emptyList()
+            return
         }
 
         val topStoriesIds = ParseExtractorData.parseIdArrayResponse(hnTopStoriesResponse)
-
-        val hnItems = mutableListOf<TempNews>()
 
         var count = 0
 
@@ -98,7 +107,7 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
             val item = ParseExtractorData.parseItemResponse(hnItemResponse)
 
             if (item.title != null && item.url != null) {
-                hnItems.add(
+                hackerNewsTopStoriesTempNews.add(
                         TempNews(
                                 item.title,
                                 item.url,
@@ -109,25 +118,26 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
             }
         }
         myLogln(".")
-        return hnItems
     }
 
     // Function to retrieve top stories from New York Times API
-    fun getNewYorkTimesTopStories(): List<TempNews> {
+    fun makeNewYorkTimesTopStories() {
+
         myLogln("Reading top stories from the New York Times API...")
+
+        newYorkTimesTopStoriesTempNews.clear()
+
         val nytRequest = ParseExtractorData.createRequest(Config.NYT_BASE_URL + Config.NYT_TECH_ENDPOINT + Config.NYT_API_KEY_PARAM + apiKey)
         val nytResponse = ParseExtractorData.executeRequest(nytRequest)
 
         if (!nytResponse.isSuccessful) {
-            return emptyList()
+            return
         }
 
         val nytArticle = ParseExtractorData.parseArrayResponseArticle(nytResponse)
 
-        val nytNews = mutableListOf<TempNews>()
-
         for (nytResult in nytArticle.results) {
-            nytNews.add(
+            newYorkTimesTopStoriesTempNews.add(
                     TempNews(
                             nytResult.title,
                             nytResult.url,
@@ -136,10 +146,7 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
                     )
             )
         }
-        // end if/for
-        return nytNews
     }
-
 
     /**
      * Starts the persistence scheduling process that saves and loads data to/from a file
@@ -164,17 +171,52 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
 
         // load data from external API
         //
-        val hackerNewsTopStoriesTempNews = getHackerNewsTopStories()
-        val newYorkTimesTopStoriesTempNews = getNewYorkTimesTopStories()
+        makeHackerNewsTopStories()
+        makeNewYorkTimesTopStories()
 
         // save data
         //
         Persistence.saveData(hackerNewsTopStoriesTempNews, Config.HACKER_NEWS_FILE_NAME)
         Persistence.saveData(newYorkTimesTopStoriesTempNews, Config.NEW_YORK_TIMES_FILE_NAME)
 
+        makeMergeList()
+
         myLogln("done.")
 
         isFileLocked = false
         isInitialized = true
+    }
+
+    private fun makeMergeList() {
+
+        logger.info("Getting merged news")
+
+        mergedList.clear()
+
+        for (hnItem in hackerNewsTopStoriesTempNews ?: emptyList()) {
+            for (nytItem in newYorkTimesTopStoriesTempNews ?: emptyList()) {
+                val matchedInfo = ParseExtractorData.compareNews(hnItem, nytItem)
+                if (matchedInfo >= 2) {
+                    val latestDate = if (hnItem.date > nytItem.date) hnItem.date else nytItem.date
+                    mergedList.add(
+                            News(
+                                    hnItem.title,
+                                    hnItem.url,
+                                    hnItem.by,
+                                    hnItem.date,
+                                    nytItem.title,
+                                    nytItem.url,
+                                    nytItem.by,
+                                    nytItem.date,
+                                    matchedInfo,
+                                    latestDate
+                            )
+                    )
+                }
+            }
+        }
+
+        // sort the merged list by matched info and latest date
+        mergedList.sortedWith(compareByDescending<News> { it.matchedInfo }.thenByDescending { it.latestDate })
     }
 }

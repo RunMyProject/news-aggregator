@@ -48,6 +48,7 @@ class NewsController {
             throw InvalidAPIException("API KEY is missing")
         }
 
+        /*
         logger.info("Loading data Hacker News Top Stories...")
         while (PersistenceScheduling.isFileLocked) {
             Thread.sleep(1000) // Wait for 1 second
@@ -59,36 +60,13 @@ class NewsController {
             Thread.sleep(1000) // Wait for 1 second
         }
         val newYorkTimesTopStoriesTempNews = Persistence.loadData<TempNews>(Config.NEW_YORK_TIMES_FILE_NAME)
+        */
 
-        logger.info("Getting merged news")
-
-        val mergedList = mutableListOf<News>()
-
-        for (hnItem in hackerNewsTopStoriesTempNews ?: emptyList()) {
-            for (nytItem in newYorkTimesTopStoriesTempNews ?: emptyList()) {
-                val matchedInfo = ParseExtractorData.compareNews(hnItem, nytItem)
-                if (matchedInfo >= 2) {
-                    val latestDate = if (hnItem.date > nytItem.date) hnItem.date else nytItem.date
-                    mergedList.add(
-                            News(
-                                    hnItem.title,
-                                    hnItem.url,
-                                    hnItem.by,
-                                    hnItem.date,
-                                    nytItem.title,
-                                    nytItem.url,
-                                    nytItem.by,
-                                    nytItem.date,
-                                    matchedInfo,
-                                    latestDate
-                            )
-                    )
-                }
-            }
+        while (PersistenceScheduling.isFileLocked) {
+            Thread.sleep(1000) // Wait for 1 second
         }
 
-        // sort the merged list by matched info and latest date
-        return mergedList.sortedWith(compareByDescending<News> { it.matchedInfo }.thenByDescending { it.latestDate })
+        return PersistenceScheduling.mergedList
     }
 
     /**
