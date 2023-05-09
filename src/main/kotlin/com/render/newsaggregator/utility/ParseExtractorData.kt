@@ -81,17 +81,29 @@ object ParseExtractorData {
      * Compares two TempNews objects and returns a score indicating their similarity.
      */
     fun compareNews(hn: TempNews, nyt: TempNews): Int {
+
         var matchedInfo = 0
 
+        /*
+        // too strict!
         // At least title and url must be similar, otherwise it fails.
         if (!myCompareStrings(hn.title, nyt.title) || !myCompareStrings(hn.url, nyt.url)) {
             return 0
         }
-
-        matchedInfo += 2
-
+        matchedInfo += 2;
         if (myCompareStrings(hn.by, nyt.by)) {
             matchedInfo += 1
+        }
+        */
+
+        if (myCompareStrings(hn.title, nyt.title)) {
+            matchedInfo ++;
+        }
+        if (myCompareStrings(hn.url, nyt.url)) {
+            matchedInfo ++;
+        }
+        if (myCompareStrings(hn.by, nyt.by)) {
+            matchedInfo ++;
         }
 
         return matchedInfo
