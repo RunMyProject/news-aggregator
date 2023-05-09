@@ -176,8 +176,8 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
 
         // save data
         //
-        Persistence.saveData(hackerNewsTopStoriesTempNews, Config.HACKER_NEWS_FILE_NAME)
-        Persistence.saveData(newYorkTimesTopStoriesTempNews, Config.NEW_YORK_TIMES_FILE_NAME)
+        // Persistence.saveData(hackerNewsTopStoriesTempNews, Config.HACKER_NEWS_FILE_NAME)
+        // Persistence.saveData(newYorkTimesTopStoriesTempNews, Config.NEW_YORK_TIMES_FILE_NAME)
 
         makeMergeList()
 
