@@ -104,6 +104,35 @@ Alternatively, you can store the API key using the following endpoint:
 
 ---
 
+## Setting the `nytimes_api_key` Environment Variable
+
+### Cloud Example
+
+If you are using a cloud provider like Render, you can set the `nytimes_api_key` environment variable in your application settings. Here's an example of how to do it on Render:
+
+1. Go to your app's dashboard on Render.
+2. Click on "Settings" in the left sidebar.
+3. Scroll down to the "Environment Variables" section.
+4. Click on "Add Environment Variable".
+5. Enter "nytimes_api_key" as the name and your API key as the value.
+6. Click on "Save".
+
+![render-env-vars.png](images%2Frender-env-vars.png)
+
+After setting the `nytimes_api_key` environment variable, you can retrieve it in your Kotlin application using `val apiKey = getenv("nytimes_api_key")`.
+
+### Linux Example
+
+If you are running your Kotlin application on a Linux system, you can set the `nytimes_api_key` environment variable using the `export` command. Here's an example of how to do it in a terminal:
+
+```
+$ export nytimes_api_key=YOUR_API_KEY_HERE
+```
+
+After setting the `nytimes_api_key` environment variable, you can retrieve it in your Kotlin application using `val apiKey = getenv("nytimes_api_key")`.
+
+---
+
 ## Release on your PaaS
 
 Once you have released your application on your preferred PaaS (in this case, I used the cloud provider Render), if the API has been uploaded correctly, you should see a screen like the one below and wait for the loading to finish (done).
