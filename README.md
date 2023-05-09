@@ -95,6 +95,20 @@ In the screen below:
 
 ---
 
+## Improving News Virality Scores with Jaro-Winkler Similarity: A Microservice Approach
+
+The Jaro-Winkler distance algorithm and the Damerau-Levenshtein distance algorithm are both measures of similarity between two strings, but they differ in their approach and the type of errors they account for.
+
+The Jaro-Winkler distance algorithm is primarily designed for use in record linkage applications where it is important to distinguish between two strings that are almost identical and those that are completely different. It considers the number of matching characters, the number of transpositions, and the length of common prefixes between the two strings.
+
+On the other hand, the Damerau-Levenshtein distance algorithm is a more general measure of edit distance between two strings. It accounts for the number of insertions, deletions, substitutions, and transpositions required to transform one string into another.
+
+In the case of the News Aggregator, the Jaro-Winkler distance algorithm was chosen because it provides a more nuanced measure of similarity between two strings that is better suited for news articles. The algorithm gives more weight to common prefixes, which often include key terms or names that are important for identifying similar articles. The Damerau-Levenshtein distance algorithm, on the other hand, may give too much weight to minor differences in spelling or grammar, which may not be as important for identifying similar news articles.
+
+Overall, the choice of distance algorithm depends on the specific use case and the type of similarity that is important to measure. In the case of the News Aggregator, the Jaro-Winkler distance algorithm was found to be more accurate in measuring similarity between news articles than the Damerau-Levenshtein distance algorithm.
+
+---
+
 ## Description of News Aggregator Application Architecture
 
 The News Aggregator application is designed as a microservice architecture that uses a RESTful API to provide access to its functionality. The application is built using the Kotlin programming language and the Spring Boot framework. The source code of the application is organized into several packages, each of which contains a set of related classes.
