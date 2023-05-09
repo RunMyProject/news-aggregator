@@ -44,7 +44,7 @@ class PersistenceScheduling(private val setApiKey: String) : Runnable {
     private val logger = LoggerFactory.getLogger(PersistenceScheduling::class.java)
 
     object PersistenceConstants {
-        const val PERSISTENCE_INTERVAL = 10L * 60L * 1000L // Persistence interval in milliseconds
+        const val PERSISTENCE_INTERVAL = 120L * 60L * 1000L // Persistence interval in milliseconds
     }
 
     companion object {
