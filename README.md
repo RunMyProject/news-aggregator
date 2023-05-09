@@ -62,6 +62,25 @@ New York Times.
 
 ---
 
+## Example of response from /news:
+
+```
+{
+    "titleHackerNews": "Sam Bankman-Fried, in first detailed defense, seeks to dismiss charges",
+    "urlHackerNews": "https://www.nytimes.com/2023/05/08/technology/sam-bankman-fried-defense.html",
+    "byHackerNews": "crhulls",
+    "dateHackerNews": "2023-05-09T04:44:09Z",
+    "titleNewYorkTimes": "Sam Bankman-Fried, in First Detailed Defense, Seeks to Dismiss Charges",
+    "urlNewYorkTimes": "https://www.nytimes.com/2023/05/08/technology/sam-bankman-fried-defense.html",
+    "byNewYorkTimes": "By David Yaffe-Bellany and Matthew Goldstein",
+    "dateNewYorkTimes": "2023-05-08T23:34:21Z",
+    "matchedInfo": 2,
+    "latestDate": "2023-05-09T04:44:09Z"
+}
+```
+
+---
+
 ## Getting Started
 
 To run the News Aggregator application on your local machine, you need to have Gradle installed. Once you have installed these dependencies, follow the instructions below:
