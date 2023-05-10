@@ -56,6 +56,8 @@ New York Times.
 
 ## APIs call from Render
 
+Being the PaaS in free mode it has continuous restarts, for this reason the calls undergo a strong slowdown, around 5-10 minutes. For this reason I suggest you install it on your local machine.
+
 - https://news-aggregator-h7g4.onrender.com/news
 - https://news-aggregator-h7g4.onrender.com/news/hackernews
 - https://news-aggregator-h7g4.onrender.com/news/newyorktimes
